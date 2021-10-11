@@ -5,9 +5,24 @@
  */
 package ui;
 
+//import java.security.Timestamp;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+//import java.uti
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import model.Car;
 import model.CarCatalog;
+import model.Utility;
 
 /**
  *
@@ -19,6 +34,7 @@ public class CreatePanel extends javax.swing.JPanel {
      * Creates new form CreatePanel
      */
     CarCatalog cars;
+
     public CreatePanel(CarCatalog cars) {
         initComponents();
         this.cars = cars;
@@ -41,19 +57,33 @@ public class CreatePanel extends javax.swing.JPanel {
         txtModel = new javax.swing.JTextField();
         txtSeats = new javax.swing.JTextField();
         txtLocation = new javax.swing.JTextField();
-        txtAvailable = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
+        lblManufacturedYear = new javax.swing.JLabel();
+        txtManufacturedYear = new javax.swing.JTextField();
+        lblSerialNumber = new javax.swing.JLabel();
+        txtSerialNumber = new javax.swing.JTextField();
+        checkBoxAvailability = new javax.swing.JCheckBox();
+        btnUploadFile = new javax.swing.JButton();
+        checkBoxExpiredCertificate = new javax.swing.JCheckBox();
+        lblCertificateExpired = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtCarBrand = new javax.swing.JTextField();
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(102, 0, 153));
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitle.setText("Add Car");
 
+        lblModel.setForeground(new java.awt.Color(102, 0, 153));
         lblModel.setText("Model :");
 
+        lblSeats.setForeground(new java.awt.Color(102, 0, 153));
         lblSeats.setText("Seats : ");
 
+        lblLocation.setForeground(new java.awt.Color(102, 0, 153));
         lblLocation.setText("Location : ");
 
+        lblAvailable.setForeground(new java.awt.Color(102, 0, 153));
         lblAvailable.setText("Available : ");
 
         txtModel.setText(" ");
@@ -62,14 +92,45 @@ public class CreatePanel extends javax.swing.JPanel {
 
         txtLocation.setText(" ");
 
-        txtAvailable.setText(" ");
-
+        btnSave.setForeground(new java.awt.Color(102, 0, 153));
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
+
+        lblManufacturedYear.setForeground(new java.awt.Color(102, 0, 153));
+        lblManufacturedYear.setText("Manufactured year : ");
+
+        txtManufacturedYear.setText(" ");
+
+        lblSerialNumber.setForeground(new java.awt.Color(102, 0, 153));
+        lblSerialNumber.setText("Serial Number : ");
+
+        txtSerialNumber.setText(" ");
+
+        checkBoxAvailability.setForeground(new java.awt.Color(102, 0, 153));
+        checkBoxAvailability.setText("Yes");
+
+        btnUploadFile.setForeground(new java.awt.Color(102, 0, 153));
+        btnUploadFile.setText("Upload file");
+        btnUploadFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadFileActionPerformed(evt);
+            }
+        });
+
+        checkBoxExpiredCertificate.setForeground(new java.awt.Color(102, 0, 153));
+        checkBoxExpiredCertificate.setText("Yes");
+
+        lblCertificateExpired.setForeground(new java.awt.Color(102, 0, 153));
+        lblCertificateExpired.setText("Certiificate expired :");
+
+        jLabel1.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel1.setText("Brand : ");
+
+        txtCarBrand.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -79,81 +140,233 @@ public class CreatePanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(173, 173, 173)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblAvailable)
-                    .addComponent(lblLocation)
-                    .addComponent(lblSeats)
-                    .addComponent(lblModel))
-                .addGap(31, 31, 31)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblManufacturedYear)
+                            .addComponent(lblAvailable)
+                            .addComponent(lblSerialNumber)
+                            .addComponent(lblCertificateExpired))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(51, 51, 51)
+                            .addComponent(lblLocation)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblModel)
+                        .addComponent(lblSeats))
+                    .addComponent(jLabel1))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSave)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtModel, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                        .addComponent(txtSeats)
-                        .addComponent(txtLocation)
-                        .addComponent(txtAvailable)))
-                .addContainerGap(305, Short.MAX_VALUE))
+                    .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkBoxExpiredCertificate)
+                    .addComponent(checkBoxAvailability)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUploadFile))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtCarBrand, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtModel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                        .addComponent(txtSeats, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtManufacturedYear, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtSerialNumber, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap(234, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(lblTitle)
-                .addGap(58, 58, 58)
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblModel)
                     .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtCarBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSeats)
                     .addComponent(txtSeats, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLocation)
                     .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAvailable)
-                    .addComponent(txtAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
-                .addComponent(btnSave)
-                .addContainerGap(217, Short.MAX_VALUE))
+                    .addComponent(checkBoxAvailability)
+                    .addComponent(lblAvailable))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblManufacturedYear)
+                    .addComponent(txtManufacturedYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSerialNumber)
+                    .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCertificateExpired)
+                    .addComponent(checkBoxExpiredCertificate))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave)
+                    .addComponent(btnUploadFile))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        
-        String model = txtModel.getText();
-        String location = txtLocation.getText();
-        int seats = Integer.parseInt(txtSeats.getText());
-        boolean available = Boolean.parseBoolean(txtAvailable.getText());
-        
-        Car car = cars.addNewCar();
-        System.out.println("New car details : " + car);
-        car.setAvailable(available);
-        car.setLocation(location);
-        car.setModel(model);
-        car.setSeats(seats);
-        
-        JOptionPane.showMessageDialog(this, "New Car added successfully");
-        
-        txtAvailable.setText("");
-        txtLocation.setText("");
-        txtModel.setText("");
-        txtSeats.setText("");
+        if (validateFields()) {
+            String model = txtModel.getText();
+            String location = txtLocation.getText();
+            int seats = Integer.parseInt(txtSeats.getText());
+            String serialNumber = txtSerialNumber.getText();
+            DateFormat currentTimestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date currentDate = new Date();
+            Car car = cars.addNewCar();
+            System.out.println("New car details : " + car);
+            car.setLocation(location);
+            car.setModel(model);
+            car.setSeats(seats);
+            car.setSerialNumber(serialNumber);
+            car.setManufacturedYear(txtManufacturedYear.getText());
+            car.setCarBrand(txtCarBrand.getText());
+            try {
+                car.setTimestampAdded(new Timestamp(new Date().getTime()));
+                car.setTimestampUpdated(new Timestamp(new Date().getTime()));
+            } catch (Exception ex) {
+                System.out.println("Failed to add date");
+            }
+            if (checkBoxAvailability.isSelected()) {
+                car.setAvailable(Boolean.TRUE);
+            } else {
+                car.setAvailable(Boolean.FALSE);
+            }
+            if (checkBoxExpiredCertificate.isSelected()) {
+                car.setExpiredCertificate(Boolean.TRUE);
+            } else {
+                car.setExpiredCertificate(Boolean.FALSE);
+            }
+            JOptionPane.showMessageDialog(this, "New Car added successfully");
+            Date date = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
+            cars.setLastUpdated(timestamp);
+            txtLocation.setText("");
+            txtModel.setText("");
+            txtSeats.setText("");
+            txtManufacturedYear.setText("");
+            txtSerialNumber.setText("");
+            checkBoxAvailability.setSelected(false);
+            checkBoxExpiredCertificate.setSelected(false);
+            txtCarBrand.setText("");
+        }
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnUploadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadFileActionPerformed
+        // TODO add your handling code here:
+        readData();
+    }//GEN-LAST:event_btnUploadFileActionPerformed
 
+    private boolean validateFields() {
+        if (!Utility.isValidModel(txtModel.getText())) {
+            JOptionPane.showMessageDialog(this, "Model is invalid. Please input alphanumeric characters.");
+            return false;
+        } else if (!Utility.isValidSeatCount(Integer.parseInt(txtSeats.getText()))) {
+            JOptionPane.showMessageDialog(this, "Seat count is invalid. Please input a number between 1 and 10.");
+            return false;
+        } else if (!Utility.isValidLocation(txtLocation.getText())) {
+            JOptionPane.showMessageDialog(this, "Location is invalid. Please input a string.");
+            return false;
+        } else if (!Utility.isValidSerialNumber(txtSerialNumber.getText())) {
+            JOptionPane.showMessageDialog(this, "Serial number is invalid. Please input alphanumeric characters.");
+            return false;
+        } else if (!Utility.isValidManufacturedYear(txtManufacturedYear.getText())) {
+            JOptionPane.showMessageDialog(this, "Manufactured year is invalid. Should be a year between 1970 and 2021.");
+            return false;
+        } else if (!Utility.isValidCarBrand(txtCarBrand.getText())) {
+            JOptionPane.showMessageDialog(this, "Car brand should be a string");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void readData() {
+        String pathToFile = getFilePath();
+        System.out.println("Path to file : " + pathToFile);
+        if (pathToFile != null) {
+            FileInputStream fstream = null;
+            try {
+
+                fstream = new FileInputStream(pathToFile);
+                BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+                String strLine = "";
+                String[] tokens = strLine.split(", ");
+                //Read file line by line
+                int counter = 0;
+                while ((strLine = br.readLine()) != null) {
+                    // Copy the content into the array
+                    tokens = strLine.split(", ");
+                    Car car = cars.addNewCar();
+                    car.setModel(tokens[0]);
+                    car.setSerialNumber(tokens[1]);
+                    car.setLocation(tokens[2]);
+                    car.setAvailable(Boolean.parseBoolean(tokens[3]));
+                    car.setSeats(Integer.parseInt(tokens[4])); 
+                    Date date = new Date();
+                    Timestamp timestamp = new Timestamp(date.getTime());
+                    try {
+                        car.setTimestampAdded(new Timestamp(new Date().getTime()));
+                        car.setTimestampUpdated(new Timestamp(new Date().getTime()));
+                        car.setManufacturedYear(tokens[5]);
+                    } catch (Exception ex) {
+                        System.out.println("Failed to add date");
+                    }
+                    car.setCarBrand(tokens[6]);    
+                    cars.setLastUpdated(timestamp);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fstream.close();
+                } catch (Exception ignore) {
+                }
+            }
+
+        }
+    }
+
+    private String getFilePath() {
+        JFileChooser jd = new JFileChooser();
+        jd.setDialogTitle("Choose input file");
+        int returnVal = jd.showOpenDialog(null);
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+        return jd.getSelectedFile().toPath().toString();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUploadFile;
+    private javax.swing.JCheckBox checkBoxAvailability;
+    private javax.swing.JCheckBox checkBoxExpiredCertificate;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAvailable;
+    private javax.swing.JLabel lblCertificateExpired;
     private javax.swing.JLabel lblLocation;
+    private javax.swing.JLabel lblManufacturedYear;
     private javax.swing.JLabel lblModel;
     private javax.swing.JLabel lblSeats;
+    private javax.swing.JLabel lblSerialNumber;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JTextField txtAvailable;
+    private javax.swing.JTextField txtCarBrand;
     private javax.swing.JTextField txtLocation;
+    private javax.swing.JTextField txtManufacturedYear;
     private javax.swing.JTextField txtModel;
     private javax.swing.JTextField txtSeats;
+    private javax.swing.JTextField txtSerialNumber;
     // End of variables declaration//GEN-END:variables
 }

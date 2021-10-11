@@ -5,11 +5,17 @@
  */
 package ui;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Car;
 import model.CarCatalog;
+import model.Utility;
 
 /**
  *
@@ -20,12 +26,17 @@ public class ViewPanel extends javax.swing.JPanel {
     /**
      * Creates new form ViewPanel
      */
-    
-    CarCatalog cars ;
+    CarCatalog cars;
+
     public ViewPanel(CarCatalog cars) {
         initComponents();
         this.cars = cars;
-        
+        try {
+            txtLastModified.setText(cars.getLastUpdated());
+        } catch (Exception ex) {
+//            
+        }
+
         populateTable();
     }
 
@@ -42,33 +53,49 @@ public class ViewPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCars = new javax.swing.JTable();
         btnDelete = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtSearchedModel = new javax.swing.JTextField();
-        txtSearchedLocation = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
-        txtSearchedAvailability = new javax.swing.JTextField();
         btnUpdate = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtModel = new javax.swing.JTextField();
+        txtSeats = new javax.swing.JTextField();
+        txtLocation = new javax.swing.JTextField();
+        btnView = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtSerialNumber = new javax.swing.JTextField();
+        txtManufacturedYear = new javax.swing.JTextField();
+        txtTimestampAdded = new javax.swing.JTextField();
+        txtTimestampUpdated = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txtLastModified = new javax.swing.JTextField();
+        checkBoxIsAvailable = new javax.swing.JCheckBox();
+        checkBoxCertificateExpired = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        txtCarBrand = new javax.swing.JTextField();
+
+        setForeground(new java.awt.Color(102, 0, 153));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 0, 153));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("View Cars");
 
         tblCars.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Model", "Seats", "Location", "Available"
+                "Model", "Seats", "Location", "Available", "Car brand"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, false
+                false, true, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -77,6 +104,7 @@ public class ViewPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblCars);
 
+        btnDelete.setForeground(new java.awt.Color(102, 0, 153));
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,29 +112,72 @@ public class ViewPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setText("Search by:");
-
-        jLabel2.setText("Model : ");
-
-        jLabel4.setText("Location :");
-
-        jLabel5.setText("Availability :");
-
-        txtSearchedModel.setText(" ");
-
-        txtSearchedLocation.setText(" ");
-
-        btnSearch.setText("Search");
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdate.setForeground(new java.awt.Color(102, 0, 153));
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
             }
         });
 
-        txtSearchedAvailability.setText(" ");
+        jLabel2.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel2.setText("Model : ");
 
-        btnUpdate.setText("Update");
+        jLabel3.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel3.setText("Seats :");
+
+        jLabel4.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel4.setText("Location : ");
+
+        txtModel.setText("  ");
+
+        txtSeats.setText(" ");
+
+        txtLocation.setText(" ");
+
+        btnView.setForeground(new java.awt.Color(102, 0, 153));
+        btnView.setText("View");
+        btnView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel6.setText("Serial Number : ");
+
+        jLabel7.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel7.setText("Manufactured year : ");
+
+        jLabel8.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel8.setText("Timestamp added : ");
+
+        jLabel9.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel9.setText("Timestamp updated :");
+
+        txtSerialNumber.setText(" ");
+
+        txtManufacturedYear.setText(" ");
+
+        txtTimestampAdded.setText(" ");
+
+        txtTimestampUpdated.setText(" ");
+
+        jLabel10.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel10.setText("Last modified : ");
+
+        txtLastModified.setText(" ");
+
+        checkBoxIsAvailable.setForeground(new java.awt.Color(102, 0, 153));
+        checkBoxIsAvailable.setText("Available");
+
+        checkBoxCertificateExpired.setForeground(new java.awt.Color(102, 0, 153));
+        checkBoxCertificateExpired.setText("Certificate expired");
+
+        jLabel5.setForeground(new java.awt.Color(102, 0, 153));
+        jLabel5.setText("Car brand : ");
+
+        txtCarBrand.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -114,131 +185,282 @@ public class ViewPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 685, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(521, 521, 521)
-                            .addComponent(btnUpdate)
-                            .addGap(28, 28, 28)
-                            .addComponent(btnDelete))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel5))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnSearch)
-                                .addComponent(txtSearchedModel, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                                .addComponent(txtSearchedLocation)
-                                .addComponent(txtSearchedAvailability)))))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnView)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnUpdate)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDelete)))))
+                .addGap(114, 191, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSeats, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(checkBoxIsAvailable)
+                    .addComponent(checkBoxCertificateExpired))
+                .addGap(303, 303, 303)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtLastModified, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(103, 103, 103))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTimestampAdded, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtManufacturedYear, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtCarBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTimestampUpdated, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtSearchedModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(txtSearchedAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(txtSearchedLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnSearch)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnView))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDelete)
-                    .addComponent(btnUpdate))
-                .addGap(171, 171, 171))
+                    .addComponent(jLabel2)
+                    .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtSeats, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtManufacturedYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtTimestampAdded, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtTimestampUpdated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkBoxIsAvailable))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtCarBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkBoxCertificateExpired))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtLastModified, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        
+
         int selectedRowIndex = tblCars.getSelectedRow();
-        if(selectedRowIndex < 0) {
-            JOptionPane.showMessageDialog(this,"Please select a row to delete");
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row to delete");
             return;
-        } 
-        
+        }
+
         DefaultTableModel model = (DefaultTableModel) tblCars.getModel();
         Car selectedCar = (Car) model.getValueAt(selectedRowIndex, 0);
         cars.deleteCar(selectedCar);
         JOptionPane.showMessageDialog(this, "Car deleted successfuly");
         populateTable();
-    }//GEN-LAST:event_btnDeleteActionPerformed
-    
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
-        String searchedModel = txtSearchedModel.getText();
-        String searchedLocation = txtSearchedLocation.getText();
-        String searchedAvailability = txtSearchedAvailability.getText(); 
-        
-        returnSearchedCars(searchedModel);       
-    }//GEN-LAST:event_btnSearchActionPerformed
+        Date date = new Date();
+        Timestamp deleteTimestamp = new Timestamp(date.getTime());
+        cars.setLastUpdated(deleteTimestamp);
+        try {
+            txtLastModified.setText(cars.getLastUpdated());
+        } catch (Exception ex) {
+//                 
+        }
 
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+        // TODO add your handling code here:
+        int selectedRowIndex = tblCars.getSelectedRow();
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row to view");
+            return;
+        }
+        DefaultTableModel model = (DefaultTableModel) tblCars.getModel();
+        Car selectedRow = (Car) model.getValueAt(selectedRowIndex, 0);
+        txtModel.setText(selectedRow.getModel());
+        txtLocation.setText(selectedRow.getLocation());
+        txtSeats.setText(selectedRow.getSeats());
+        txtManufacturedYear.setText(selectedRow.getManufacturedYear());
+        txtTimestampAdded.setText(selectedRow.getTimestampAdded());
+        txtTimestampUpdated.setText(selectedRow.getTimestampUpdated());
+        txtSerialNumber.setText(selectedRow.getSerialNumber());
+        checkBoxIsAvailable.setSelected(selectedRow.isAvailable());
+        checkBoxCertificateExpired.setSelected(selectedRow.isExpiredCertificate());
+        txtCarBrand.setText(selectedRow.getCarBrand());
+    }//GEN-LAST:event_btnViewActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+
+        if (validateFields()) {
+            int selectedRowIndex = tblCars.getSelectedRow();
+            if (selectedRowIndex < 0) {
+                JOptionPane.showMessageDialog(this, "Please select a row to view");
+                return;
+            }
+            DefaultTableModel model = (DefaultTableModel) tblCars.getModel();
+            Car selectedCar = (Car) model.getValueAt(selectedRowIndex, 0);
+            String modelToUpdate = txtModel.getText();
+            String locationToUpdate = txtLocation.getText();
+            int seatsToUpdate = Integer.parseInt(txtSeats.getText());
+            if (checkBoxIsAvailable.isSelected()) {
+                selectedCar.setAvailable(Boolean.TRUE);
+            } else {
+                selectedCar.setAvailable(Boolean.FALSE);
+            }
+            if (checkBoxCertificateExpired.isSelected()) {
+                selectedCar.setExpiredCertificate(Boolean.TRUE);
+            } else {
+                selectedCar.setExpiredCertificate(Boolean.FALSE);
+            }
+            Date date = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
+            cars.setLastUpdated(timestamp);
+            selectedCar.setLocation(locationToUpdate);
+            selectedCar.setModel(modelToUpdate);
+            selectedCar.setSeats(seatsToUpdate);
+            selectedCar.setCarBrand(txtCarBrand.getText());
+            try {
+                selectedCar.setTimestampUpdated(timestamp);
+            } catch (Exception ex) {
+                Logger.getLogger(ViewPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            populateTable();
+            try {
+                txtLastModified.setText(cars.getLastUpdated());
+            } catch (Exception ex) {
+                System.out.println("Cannot display last modified");
+            }
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private boolean validateFields() {
+        if (!Utility.isValidModel(txtModel.getText())) {
+            JOptionPane.showMessageDialog(this, "Model is invalid. Please input alphanumeric characters.");
+            return false;
+        } else if (!Utility.isValidSeatCount(Integer.parseInt(txtSeats.getText()))) {
+            System.out.println("Seat count is " + txtSeats.getText());
+            JOptionPane.showMessageDialog(this, "Seat count is invalid. Please input a number between 1 and 10.");
+            return false;
+        } else if (!Utility.isValidLocation(txtLocation.getText())) {
+            System.out.println("Location is " + txtLocation.getText());
+            JOptionPane.showMessageDialog(this, "Location is invalid. Please input a string.");
+            return false;
+        } else if (!Utility.isValidSerialNumber(txtSerialNumber.getText())) {
+            JOptionPane.showMessageDialog(this, "Serial number is invalid. Please input alphanumeric characters.");
+            return false;
+        } else if (!Utility.isValidCarBrand(txtCarBrand.getText())) {
+            JOptionPane.showMessageDialog(this, "Car brand is invalid.");
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnView;
+    private javax.swing.JCheckBox checkBoxCertificateExpired;
+    private javax.swing.JCheckBox checkBoxIsAvailable;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblCars;
-    private javax.swing.JTextField txtSearchedAvailability;
-    private javax.swing.JTextField txtSearchedLocation;
-    private javax.swing.JTextField txtSearchedModel;
+    private javax.swing.JTextField txtCarBrand;
+    private javax.swing.JTextField txtLastModified;
+    private javax.swing.JTextField txtLocation;
+    private javax.swing.JTextField txtManufacturedYear;
+    private javax.swing.JTextField txtModel;
+    private javax.swing.JTextField txtSeats;
+    private javax.swing.JTextField txtSerialNumber;
+    private javax.swing.JTextField txtTimestampAdded;
+    private javax.swing.JTextField txtTimestampUpdated;
     // End of variables declaration//GEN-END:variables
 
     private void populateTable() {
         DefaultTableModel model = (DefaultTableModel) tblCars.getModel();
         model.setRowCount(0);
-        for (Car cs : cars.getCars()){
-            Object[] row = new Object[4];
+        for (Car cs : cars.getCars()) {
+            Object[] row = new Object[5];
             row[0] = cs;
             row[1] = cs.getSeats();
             row[2] = cs.getLocation();
-            row[3] = cs.isAvailable();            
+            row[3] = cs.isAvailable();
+            row[4] = cs.getCarBrand();
             model.addRow(row);
         }
     }
 
     private void returnSearchedCars(String model) {
-        List<Car> searchedCars = cars.findCar(model);
+        List<Car> searchedCars = cars.findCarByModel(model);
         populateSearchedCars(searchedCars);
     }
 
     private void populateSearchedCars(List<Car> searchedCars) {
         DefaultTableModel model = (DefaultTableModel) tblCars.getModel();
         model.setRowCount(0);
-        for(Car cs : searchedCars) {
+        for (Car cs : searchedCars) {
             Object[] row = new Object[4];
             row[0] = cs;
             row[1] = cs.getSeats();
             row[2] = cs.getLocation();
             row[3] = cs.isAvailable();
-            
             model.addRow(row);
         }
     }

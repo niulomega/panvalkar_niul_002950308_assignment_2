@@ -21,10 +21,7 @@ public class MainJFrame extends javax.swing.JFrame {
     
     public MainJFrame() {
         initComponents();
-    
-        cars  = new CarCatalog();
-        
-        
+        cars  = new CarCatalog(); 
     }
 
     /**
@@ -40,10 +37,12 @@ public class MainJFrame extends javax.swing.JFrame {
         controlPanel = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnView = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
         workPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        btnCreate.setForeground(new java.awt.Color(102, 0, 153));
         btnCreate.setText("Add Car");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -51,10 +50,19 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
+        btnView.setForeground(new java.awt.Color(102, 0, 153));
         btnView.setText("View Cars");
         btnView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setForeground(new java.awt.Color(102, 0, 153));
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
             }
         });
 
@@ -63,12 +71,14 @@ public class MainJFrame extends javax.swing.JFrame {
         controlPanelLayout.setHorizontalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(controlPanelLayout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(controlPanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         controlPanelLayout.setVerticalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,7 +87,9 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addComponent(btnCreate)
                 .addGap(62, 62, 62)
                 .addComponent(btnView)
-                .addContainerGap(323, Short.MAX_VALUE))
+                .addGap(54, 54, 54)
+                .addComponent(btnSearch)
+                .addContainerGap(246, Short.MAX_VALUE))
         );
 
         splitPane.setLeftComponent(controlPanel);
@@ -123,6 +135,12 @@ public class MainJFrame extends javax.swing.JFrame {
         splitPane.setRightComponent(viewPanel);
     }//GEN-LAST:event_btnViewActionPerformed
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        SearchPanel searchPanel = new SearchPanel(cars);
+        splitPane.setRightComponent(searchPanel);
+    }//GEN-LAST:event_btnSearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -160,6 +178,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnView;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JSplitPane splitPane;
